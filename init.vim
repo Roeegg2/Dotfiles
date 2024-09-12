@@ -36,8 +36,8 @@ lua << EOF
 	require('lspconfig').clangd.setup{}
 	
 	local telescope = require('telescope')
-	local actions = require('telescope.actions')
-    telescope.setup {
+	require('telescope.actions')
+    	telescope.setup {
 		pickers = {
     	    colorscheme = {
 				enable_preview = true,
