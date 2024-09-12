@@ -1,11 +1,24 @@
 call plug#begin()
 
-Plug 'tpope/vim-sensible'
-Plug 'github/copilot.vim'
-Plug 'neovim/nvim-lspconfig'
-Plug 'navarasu/onedark.nvim'
-Plug 'nvim-tree/nvim-tree.lua'
-Plug 'numToStr/Comment.nvim'
+Plug 'tpope/vim-sensible' " basic agreed upon settings
+Plug 'tpope/vim-fugitive' " git commands
+Plug 'github/copilot.vim' " github copilot
+Plug 'nvim-lua/plenary.nvim' " dependency for telescope
+Plug 'nvim-telescope/telescope.nvim' " fuzzy finder
+
+" colorschemes
+Plug 'tiagovla/tokyodark.nvim'
+Plug 'zootedb0t/citruszest.nvim'
+Plug 'sainnhe/sonokai'
+Plug 'Tsuzat/NeoSolarized.nvim'
+
+Plug 'nvim-tree/nvim-tree.lua' " file explorer
+Plug 'numToStr/Comment.nvim' " comment shortcut plugin
+Plug 'tpope/vim-obsession' " session management
+Plug 'jiangmiao/auto-pairs' " inserts closing brackets and quotes automatically
+
+Plug 'vim-airline/vim-airline' " status line
+Plug 'vim-airline/vim-airline-themes' " status line themes
 
 Plug 'neovim/nvim-lspconfig'     " LSP configurations
 Plug 'hrsh7th/nvim-cmp'           " Autocompletion plugin
@@ -18,15 +31,22 @@ Plug 'hrsh7th/vim-vsnip'          " Snippet engine
 
 call plug#end()
 
-set number
-colorscheme onedark
-
 lua << EOF
 	require('nvim-tree').setup()
 	require('lspconfig').clangd.setup{}
 	
-	local cmp = require('cmp')
+	local telescope = require('telescope')
+	local actions = require('telescope.actions')
+    telescope.setup {
+		pickers = {
+    	    colorscheme = {
+				enable_preview = true,
+				ignore_builtins = true,
+			},
+		},
+	}
 
+	local cmp = require('cmp')
   	cmp.setup({
     	  snippet = {
       	    expand = function(args)
@@ -53,5 +73,18 @@ lua << EOF
     	completion = {
       	  autocomplete = { cmp.TriggerEvent.TextChanged }
     	},
-  })
+	})
 EOF
+
+" general settings
+set mouse=a
+set number
+set tabstop=4
+set shiftwidth=4
+syntax enable
+autocmd VimLeave * mksession! ~/.vim/sessions/last_session.vim
+
+" plugin related settings
+let g:airline_theme = 'term'
+command! T :Telescope
+colorscheme citruszest 
