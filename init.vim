@@ -74,6 +74,20 @@ lua << EOF
       	  autocomplete = { cmp.TriggerEvent.TextChanged }
     	},
 	})
+
+	function SetupSession()
+		local path = vim.api.nvim_buf_get_name(0)
+		local session_file = path .. "/Session.vim"
+		if vim.fn.filereadable(session_file) == 1 then
+  			vim.cmd("source " .. session_file) -- restore session
+			vim.cmd("NvimTreeOpen")	
+			vim.notify("Session found!", vim.log.levels.INFO)
+		else
+  			print("Couldn't find Session.vim file")
+		end
+	end
+
+	SetupSession()
 EOF
 
 " general settings
@@ -82,9 +96,18 @@ set number
 set tabstop=4
 set shiftwidth=4
 syntax enable
-autocmd VimLeave * mksession! ~/.vim/sessions/last_session.vim
 
 " plugin related settings
+colorscheme citruszest 
+
+let g:citruszest_enable_italic = 1
+let g:citruszest_transparent_background = 1
+let g:tokyodark_enable_italic = 1
+let g:tokyodark_transparent_background = 1
+
 let g:airline_theme = 'term'
 command! T :Telescope
-colorscheme citruszest 
+
+let g:copilot#enabled = 1
+"imap <silent><script><expr> <Tab> copilot#Accept("<CR>")
+imap <silent><script><expr> <C-j> copilot#Accept("<CR>")
