@@ -64,7 +64,6 @@ require("lazy").setup({
 			opts = {},
 		},
 		{ "AlexvZyl/nordic.nvim" },
-		{ "folke/tokyonight.nvim" },
 		{ "nvim-treesitter/nvim-treesitter" },
 		{
 			"nvim-lualine/lualine.nvim",
@@ -174,8 +173,6 @@ require("lazy").setup({
 
 vim.cmd("set number")
 
--- vim.cmd.colorscheme("tokyonight-night")
--- vim.cmd.colorscheme("tokyonight-day")
 vim.cmd.colorscheme("nordic")
 -- vim.cmd.colorscheme("habamax")
 
@@ -186,6 +183,7 @@ vim.api.nvim_set_keymap(
 	{ noremap = true, silent = true, expr = true }
 )
 
+vim.g.copilot_no_tab_map = true
 vim.cmd("command! FF Fzf")
 vim.keymap.set("n", "<c-P>", require("fzf-lua").files, { desc = "Fzf Files" })
 -- Or, with args
