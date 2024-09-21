@@ -25,9 +25,10 @@ vim.g.maplocalleader = "\\"
 -- Setup lazy.nvim
 require("lazy").setup({
 	spec = {
+		{ "sindrets/diffview.nvim" },
+		{ "akinsho/toggleterm.nvim" },
 		{ "numToStr/Comment.nvim" },
 		{ "nvim-treesitter/nvim-treesitter" },
-		{ "AlexvZyl/nordic.nvim" },
 		{ "tpope/vim-obsession" },
 		{ "neovim/nvim-lspconfig" },
 		{ "github/copilot.vim" },
@@ -89,6 +90,8 @@ require("nvim-treesitter.configs").setup({
 	ensure_installed = { "cpp", "c", "go", "python", "lua", "markdown", "markdown_inline" },
 })
 
+require("toggleterm").setup({})
+
 require("nvim-tree").setup({})
 
 require("lspconfig").pyright.setup({})
@@ -140,10 +143,6 @@ require("conform").setup({
 
 require("nvim-web-devicons").setup({})
 
-require("nordic").setup({
-	italic_comments = true,
-})
-
 require("Comment").setup()
 
 require("barbecue.ui").toggle(true)
@@ -155,33 +154,27 @@ require("lualine").setup({
 	},
 })
 
+local actions = require("diffview.actions")
+
+require("diffview").setup({})
+
 ----------- PERSONALLY DEFINED STUFF -------------------
 
-function SetupSession()
-	local path = vim.api.nvim_buf_get_name(0)
-	local session_file = path .. "/Session.vim"
-	if vim.fn.filereadable(session_file) == 1 then
-		vim.cmd("source " .. session_file) -- restore session
-		vim.cmd("NvimTreeOpen")
-		vim.notify("Session found!", vim.log.levels.INFO)
-	else
-		print("Couldn't find Session.vim file")
-	end
-end
-
-SetupSession()
 ----------- GENERAL STUFF -------------------
 
 vim.cmd("set number")
 
--- vim.cmd.colorscheme("nordic")
 vim.cmd.colorscheme("habamax")
 
 vim.g.copilot_no_tab_map = true
 vim.api.nvim_set_keymap("i", "<C-J>", 'copilot#Accept("<CR>")', { silent = true, expr = true })
 
+vim.api.nvim_set_keymap("n", "<C-T>", ":ToggleTerm<CR>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("n", "<C-y>", ":NvimTreeToggle<CR>", { noremap = true, silent = true })
+
 vim.cmd("command! FF Fzf")
 vim.keymap.set("n", "<c-P>", require("fzf-lua").files, { desc = "Fzf Files" })
 vim.keymap.set("n", "<c-L>", require("fzf-lua").live_grep_glob, { desc = "Fzf Live Global Grep" })
+vim.keymap.set("n", "<c-B>", require("fzf-lua").buffers, { desc = "Fzf Buffers" })
 
 vim.diagnostic.open_float(0, { border = "rounded", focusable = false })
