@@ -25,6 +25,13 @@ vim.g.maplocalleader = "\\"
 -- Setup lazy.nvim
 require("lazy").setup({
 	spec = {
+		{ "numToStr/Comment.nvim" },
+		{ "nvim-treesitter/nvim-treesitter" },
+		{ "AlexvZyl/nordic.nvim" },
+		{ "tpope/vim-obsession" },
+		{ "neovim/nvim-lspconfig" },
+		{ "github/copilot.vim" },
+		{ "junegunn/fzf", build = "./install --bin" },
 		{
 			"ibhagwan/fzf-lua",
 			-- optional for icon support
@@ -34,8 +41,6 @@ require("lazy").setup({
 				require("fzf-lua").setup({})
 			end,
 		},
-		{ "junegunn/fzf", build = "./install --bin" },
-		{ "nvim-tree/nvim-web-devicons" },
 		{
 			"nvim-tree/nvim-tree.lua",
 			version = "*",
@@ -44,8 +49,6 @@ require("lazy").setup({
 				"nvim-tree/nvim-web-devicons",
 			},
 		},
-		{ "github/copilot.vim" },
-		{ "neovim/nvim-lspconfig" },
 		{
 			"hrsh7th/nvim-cmp",
 			"hrsh7th/cmp-nvim-lsp",
@@ -53,26 +56,15 @@ require("lazy").setup({
 			"hrsh7th/cmp-vsnip",
 		},
 		{
-			"rmagatti/auto-session",
-			lazy = false,
-			opts = {
-				suppressed_dirs = { "~/", "~/Projects", "~/Downloads", "/" }, -- log_level = 'debug',
-			},
-		},
-		{
 			"stevearc/conform.nvim",
 			opts = {},
 		},
-		{ "AlexvZyl/nordic.nvim" },
-		{ "nvim-treesitter/nvim-treesitter" },
 		{
 			"nvim-lualine/lualine.nvim",
 			dependencies = {
 				"nvim-tree/nvim-web-devicons",
 			},
 		},
-		{ "tpope/vim-fugitive" },
-		{ "numToStr/Comment.nvim" },
 		{
 			"utilyre/barbecue.nvim",
 			name = "barbecue",
@@ -87,8 +79,6 @@ require("lazy").setup({
 		},
 	},
 	-- Configure any other settings here. See the documentation for more details.
-	-- colorscheme that will be used when installing plugins.
-	install = { colorscheme = { "habamax" } },
 	-- automatically check for plugin updates
 	checker = { enabled = true },
 })
@@ -104,6 +94,8 @@ require("nvim-tree").setup({})
 require("lspconfig").pyright.setup({})
 
 require("lspconfig").clangd.setup({})
+
+require("barbecue.ui").toggle(true)
 
 local cmp = require("cmp")
 cmp.setup({
@@ -159,34 +151,37 @@ require("barbecue.ui").toggle(true)
 require("lualine").setup({
 	options = {
 		icons_enabled = true,
-		theme = "ayu_dark",
+		theme = "gruvbox-material",
 	},
-})
-
-require("lazy").setup({
-	{ "ibhagwan/fzf-lua" },
 })
 
 ----------- PERSONALLY DEFINED STUFF -------------------
 
+function SetupSession()
+	local path = vim.api.nvim_buf_get_name(0)
+	local session_file = path .. "/Session.vim"
+	if vim.fn.filereadable(session_file) == 1 then
+		vim.cmd("source " .. session_file) -- restore session
+		vim.cmd("NvimTreeOpen")
+		vim.notify("Session found!", vim.log.levels.INFO)
+	else
+		print("Couldn't find Session.vim file")
+	end
+end
+
+SetupSession()
 ----------- GENERAL STUFF -------------------
 
 vim.cmd("set number")
 
-vim.cmd.colorscheme("nordic")
--- vim.cmd.colorscheme("habamax")
-
-vim.api.nvim_set_keymap(
-	"i",
-	"<C-j>",
-	'copilot#Accept("<C-r>=copilot#GetSelectedCompletion()<CR>")',
-	{ noremap = true, silent = true, expr = true }
-)
+-- vim.cmd.colorscheme("nordic")
+vim.cmd.colorscheme("habamax")
 
 vim.g.copilot_no_tab_map = true
+vim.api.nvim_set_keymap("i", "<C-J>", 'copilot#Accept("<CR>")', { silent = true, expr = true })
+
 vim.cmd("command! FF Fzf")
 vim.keymap.set("n", "<c-P>", require("fzf-lua").files, { desc = "Fzf Files" })
--- Or, with args
-vim.keymap.set("n", "<c-P>", function()
-	require("fzf-lua").files({})
-end, { desc = "Fzf Files" })
+vim.keymap.set("n", "<c-L>", require("fzf-lua").live_grep_glob, { desc = "Fzf Live Global Grep" })
+
+vim.diagnostic.open_float(0, { border = "rounded", focusable = false })
