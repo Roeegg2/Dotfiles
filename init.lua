@@ -29,7 +29,6 @@ require("lazy").setup({
 		{ "akinsho/toggleterm.nvim" },
 		{ "numToStr/Comment.nvim" },
 		{ "nvim-treesitter/nvim-treesitter" },
-		{ "tpope/vim-obsession" },
 		{ "neovim/nvim-lspconfig" },
 		{ "github/copilot.vim" },
 		{ "junegunn/fzf", build = "./install --bin" },
@@ -160,11 +159,30 @@ require("diffview").setup({})
 
 ----------- PERSONALLY DEFINED STUFF -------------------
 
+function SetupSession()
+	local path = vim.api.nvim_buf_get_name(0)
+	local session_file = path .. "/Session.vim"
+	if vim.fn.filereadable(session_file) == 1 then
+		vim.cmd("source " .. session_file) -- restore session
+		print("Session restored")
+	else
+		print("No session found")
+	end
+end
+
+SetupSession()
+
 ----------- GENERAL STUFF -------------------
 
 vim.cmd("set number")
 
-vim.cmd.colorscheme("habamax")
+vim.cmd.colorscheme("shine")
+
+vim.api.nvim_create_autocmd("VimEnter", {
+	callback = function()
+		require("lazy").update()
+	end,
+})
 
 vim.g.copilot_no_tab_map = true
 vim.api.nvim_set_keymap("i", "<C-J>", 'copilot#Accept("<CR>")', { silent = true, expr = true })
