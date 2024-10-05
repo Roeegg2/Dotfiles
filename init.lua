@@ -25,10 +25,15 @@ vim.g.maplocalleader = "\\"
 -- Setup lazy.nvim
 require("lazy").setup({
 	spec = {
+		{ "morhetz/gruvbox" },
+		{ "sindrets/diffview.nvim" },
+		{ "tpope/vim-dispatch" },
+		{ "HealsCodes/vim-gas" },
+		{ "HiPhish/rainbow-delimiters.nvim" },
+		{ "windwp/nvim-autopairs" },
 		{ "sindrets/diffview.nvim" },
 		{ "akinsho/toggleterm.nvim" },
 		{ "numToStr/Comment.nvim" },
-		{ "nvim-treesitter/nvim-treesitter" },
 		{ "neovim/nvim-lspconfig" },
 		{ "github/copilot.vim" },
 		{ "junegunn/fzf", build = "./install --bin" },
@@ -84,10 +89,6 @@ require("lazy").setup({
 })
 
 ----------- PLUGINS -------------------------
-
-require("nvim-treesitter.configs").setup({
-	ensure_installed = { "cpp", "c", "go", "python", "lua", "markdown", "markdown_inline" },
-})
 
 require("toggleterm").setup({})
 
@@ -153,9 +154,9 @@ require("lualine").setup({
 	},
 })
 
-local actions = require("diffview.actions")
-
 require("diffview").setup({})
+
+require('nvim-autopairs').setup {}
 
 ----------- PERSONALLY DEFINED STUFF -------------------
 
@@ -176,13 +177,7 @@ SetupSession()
 
 vim.cmd("set number")
 
-vim.cmd.colorscheme("shine")
-
-vim.api.nvim_create_autocmd("VimEnter", {
-	callback = function()
-		require("lazy").update()
-	end,
-})
+vim.cmd.colorscheme("gruvbox")
 
 vim.g.copilot_no_tab_map = true
 vim.api.nvim_set_keymap("i", "<C-J>", 'copilot#Accept("<CR>")', { silent = true, expr = true })
