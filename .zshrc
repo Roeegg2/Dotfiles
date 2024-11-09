@@ -1,108 +1,267 @@
-# If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
+#! /bin/zsh
 
-# Path to your Oh My Zsh installation.
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_DATA_HOME="$XDG_CONFIG_HOME/local/share"
+export XDG_CACHE_HOME="$XDG_CONFIG_HOME/cache"
 
-export ZSH="$HOME/.oh-my-zsh"
+export EDITOR="nvim"
+export VISUAL="nvim"
 
-# Set name of the theme to load --- if set to "random", it will
-# load a random theme each time Oh My Zsh is loaded, in which case,
-# to know which specific one was loaded, run: echo $RANDOM_THEME
-# See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="af-magic"
+setopt HIST_SAVE_NO_DUPS
 
-# Set list of themes to pick from when loading at random
-# Setting this variable when ZSH_THEME=random will cause zsh to load
-# a theme from this variable instead of looking in $ZSH/themes/
-# If set to an empty array, this variable will have no effect.
-# ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
+autoload -U compinit; compinit
+_comp_options+=(globdots) # With hidden files
 
-# Uncomment the following line to use case-sensitive completion.
-# CASE_SENSITIVE="true"
+# ---------------- ETC STUFF -----------------
+alias rzcomp="sudo ninja -C build install"
+alias rzformat="sys/clang-format.py -v -C /home/roeet/Etc/clang-format-16_linux-amd64"
+alias ls='ls --color=auto'
+alias grep='grep --color=auto'
 
-# Uncomment the following line to use hyphen-insensitive completion.
-# Case-sensitive completion must be off. _ and - will be interchangeable.
-# HYPHEN_INSENSITIVE="true"
+export PATH=$HOME/go/bin/gopls:$PATH
 
-# Uncomment one of the following lines to change the auto-update behavior
-zstyle ':omz:update' mode disabled  # disable automatic updates
-# zstyle ':omz:update' mode auto      # update automatically without asking
-# zstyle ':omz:update' mode reminder  # just remind me to update when it's time
+# ---------------- COMPLETION ----------------
 
-# Uncomment the following line to change how often to auto-update (in days).
-# zstyle ':omz:update' frequency 13
+  # ____ ___  __  __ ____  _     _____ _____ ___ ___  _   _ 
+#  / ___/ _ \|  \/  |  _ \| |   | ____|_   _|_ _/ _ \| \ | |
+# | |  | | | | |\/| | |_) | |   |  _|   | |  | | | | |  \| |
+# | |__| |_| | |  | |  __/| |___| |___  | |  | | |_| | |\  |
+#  \____\___/|_|  |_|_|   |_____|_____| |_| |___\___/|_| \_|
+ #
 
-# Uncomment the following line if pasting URLs and other text is messed up.
-# DISABLE_MAGIC_FUNCTIONS="true"
+# +---------+
+# | General |
+# +---------+
 
-# Uncomment the following line to disable colors in ls.
-# DISABLE_LS_COLORS="true"
+# source ./gambit.zsh
 
-# Uncomment the following line to disable auto-setting terminal title.
-# DISABLE_AUTO_TITLE="true"
+# Load more completions
+fpath=($DOTFILES/zsh/plugins/zsh-completions/src $fpath)
 
-# Uncomment the following line to enable command auto-correction.
-ENABLE_CORRECTION="true"
+# Should be called before compinit
+zmodload zsh/complist
 
-# Uncomment the following line to display red dots whilst waiting for completion.
-# You can also set it to another string to have that shown instead of the default red dots.
-# e.g. COMPLETION_WAITING_DOTS="%F{yellow}waiting...%f"
-# Caution: this setting can cause issues with multiline prompts in zsh < 5.7.1 (see #5765)
-COMPLETION_WAITING_DOTS="true"
+# Use hjlk in menu selection (during completion)
+# Doesn't work well with interactive mode
+bindkey -M menuselect 'h' vi-backward-char
+bindkey -M menuselect 'k' vi-up-line-or-history
+bindkey -M menuselect 'j' vi-down-line-or-history
+bindkey -M menuselect 'l' vi-forward-char
 
-# Uncomment the following line if you want to disable marking untracked files
-# under VCS as dirty. This makes repository status check for large repositories
-# much, much faster.
-# DISABLE_UNTRACKED_FILES_DIRTY="true"
+bindkey -M menuselect '^xg' clear-screen
+bindkey -M menuselect '^xi' vi-insert                      # Insert
+bindkey -M menuselect '^xh' accept-and-hold                # Hold
+bindkey -M menuselect '^xn' accept-and-infer-next-history  # Next
+bindkey -M menuselect '^xu' undo                           # Undo
 
-# Uncomment the following line if you want to change the command execution time
-# stamp shown in the history command output.
-# You can set one of the optional three formats:
-# "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
-# or set a custom format using the strftime function format specifications,
-# see 'man strftime' for details.
-# HIST_STAMPS="mm/dd/yyyy"
+autoload -U compinit; compinit
+_comp_options+=(globdots) # With hidden files
 
-# Would you like to use another custom folder than $ZSH/custom?
-# ZSH_CUSTOM=/path/to/new-custom-folder
+# Only work with the Zsh function vman
+# See $DOTFILES/zsh/scripts.zsh
+compdef vman="man"
 
-# Which plugins would you like to load?
-plugins=(git zsh-vi-mode)
-# Standard plugins can be found in $ZSH/plugins/
-# Custom plugins may be added to $ZSH_CUSTOM/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
+# +---------+
+# | Options |
+# +---------+
 
-source $ZSH/oh-my-zsh.sh
+# setopt GLOB_COMPLETE      # Show autocompletion menu with globs
+setopt MENU_COMPLETE        # Automatically highlight first element of completion menu
+setopt AUTO_LIST            # Automatically list choices on ambiguous completion.
+setopt COMPLETE_IN_WORD     # Complete from both ends of a word.
 
-# User configuration
+# +---------+
+# | zstyles |
+# +---------+
 
-alias rzcomp="sudo ninja -C /home/roeet/Projects/rizin/build install"
-alias rzformat="sys/clang-format.py -v -C ~/Etc/clang-format-16_linux-amd64"
+# Ztyle pattern
+# :completion:<function>:<completer>:<command>:<argument>:<tag>
 
-# export MANPATH="/usr/local/man:$MANPATH"
+# Define completers
+zstyle ':completion:*' completer _extensions _complete _approximate
 
-# You may need to manually set your language environment
-export LANG=en_US.UTF-8
+# Use cache for commands using cache
+zstyle ':completion:*' use-cache on
+zstyle ':completion:*' cache-path "$XDG_CACHE_HOME/zsh/.zcompcache"
+# Complete the alias when _expand_alias is used as a function
+zstyle ':completion:*' complete true
 
-# Preferred editor for local and remote sessions
-if [[ -n $SSH_CONNECTION ]]; then
-  export EDITOR='vim'
-else
-  export EDITOR='nvim'
-fi
+zle -C alias-expension complete-word _generic
+bindkey '^Xa' alias-expension
+zstyle ':completion:alias-expension:*' completer _expand_alias
 
-# Compilation flags
-# export ARCHFLAGS="-arch $(uname -m)"
+# Use cache for commands which use it
 
-# Set personal aliases, overriding those provided by Oh My Zsh libs,
-# plugins, and themes. Aliases can be placed here, though Oh My Zsh
-# users are encouraged to define aliases within a top-level file in
-# the $ZSH_CUSTOM folder, with .zsh extension. Examples:
-# - $ZSH_CUSTOM/aliases.zsh
-# - $ZSH_CUSTOM/macos.zsh
-# For a full list of active aliases, run `alias`.
-#
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
+# Allow you to select in a menu
+zstyle ':completion:*' menu select
+
+# Autocomplete options for cd instead of directory stack
+zstyle ':completion:*' complete-options true
+
+zstyle ':completion:*' file-sort modification
+
+
+zstyle ':completion:*:*:*:*:corrections' format '%F{yellow}!- %d (errors: %e) -!%f'
+zstyle ':completion:*:*:*:*:descriptions' format '%F{blue}-- %D %d --%f'
+zstyle ':completion:*:*:*:*:messages' format ' %F{purple} -- %d --%f'
+zstyle ':completion:*:*:*:*:warnings' format ' %F{red}-- no matches found --%f'
+# zstyle ':completion:*:default' list-prompt '%S%M matches%s'
+# Colors for files and directory
+zstyle ':completion:*:*:*:*:default' list-colors ${(s.:.)LS_COLORS}
+
+# Only display some tags for the command cd
+zstyle ':completion:*:*:cd:*' tag-order local-directories directory-stack path-directories
+# zstyle ':completion:*:complete:git:argument-1:' tag-order !aliases
+
+# Required for completion to be in good groups (named after the tags)
+zstyle ':completion:*' group-name ''
+
+zstyle ':completion:*:*:-command-:*:*' group-order aliases builtins functions commands
+
+# See ZSHCOMPWID "completion matching control"
+zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
+
+zstyle ':completion:*' keep-prefix true
+
+zstyle -e ':completion:*:(ssh|scp|sftp|rsh|rsync):hosts' hosts 'reply=(${=${${(f)"$(cat {/etc/ssh_,~/.ssh/known_}hosts(|2)(N) /dev/null)"}%%[# ]*}//,/ })'
+
+# ## For kubernetes
+# source $DOTFILES/zsh/plugins/kubectl-completion/_kubectl
+# zstyle ':completion:*:*:kubectl:*' list-grouped false
+
+# ---------------- PROMPT --------------------
+
+# Purification
+# by Matthieu Cneude
+# https://github.com/Phantas0s/purification
+
+# Based on:
+
+# Purity
+# by Kevin Lanni
+# https://github.com/therealklanni/purity
+# MIT License
+
+# prompt:
+# %F => color dict
+# %f => reset color
+# %~ => current path
+# %* => time
+# %n => username
+# %m => shortname host
+# %(?..) => prompt conditional - %(condition.true.false)
+
+# Display git status
+# TODO to refactor with switch / using someting else than grep
+# Might be faster using ripgrep too
+git_prompt_status() {
+  local INDEX STATUS
+
+  INDEX=$(command git status --porcelain -b 2> /dev/null)
+
+  STATUS=""
+
+  if $(echo "$INDEX" | command grep -E '^\?\? ' &> /dev/null); then
+    STATUS="$ZSH_THEME_GIT_PROMPT_UNTRACKED$STATUS"
+  fi
+
+  if $(echo "$INDEX" | grep '^A  ' &> /dev/null); then
+    STATUS="$ZSH_THEME_GIT_PROMPT_ADDED$STATUS"
+  elif $(echo "$INDEX" | grep '^M  ' &> /dev/null); then
+    STATUS="$ZSH_THEME_GIT_PROMPT_ADDED$STATUS"
+  elif $(echo "$INDEX" | grep '^MM ' &> /dev/null); then
+    STATUS="$ZSH_THEME_GIT_PROMPT_ADDED$STATUS"
+  fi
+
+  if $(echo "$INDEX" | grep '^ M ' &> /dev/null); then
+    STATUS="$ZSH_THEME_GIT_PROMPT_MODIFIED$STATUS"
+  elif $(echo "$INDEX" | grep '^AM ' &> /dev/null); then
+    STATUS="$ZSH_THEME_GIT_PROMPT_MODIFIED$STATUS"
+  elif $(echo "$INDEX" | grep '^MM ' &> /dev/null); then
+    STATUS="$ZSH_THEME_GIT_PROMPT_MODIFIED$STATUS"
+  elif $(echo "$INDEX" | grep '^ T ' &> /dev/null); then
+    STATUS="$ZSH_THEME_GIT_PROMPT_MODIFIED$STATUS"
+  fi
+
+  if $(echo "$INDEX" | grep '^R  ' &> /dev/null); then
+    STATUS="$ZSH_THEME_GIT_PROMPT_RENAMED$STATUS"
+  fi
+
+  if $(echo "$INDEX" | grep '^ D ' &> /dev/null); then
+    STATUS="$ZSH_THEME_GIT_PROMPT_DELETED$STATUS"
+  elif $(echo "$INDEX" | grep '^D  ' &> /dev/null); then
+    STATUS="$ZSH_THEME_GIT_PROMPT_DELETED$STATUS"
+  elif $(echo "$INDEX" | grep '^AD ' &> /dev/null); then
+    STATUS="$ZSH_THEME_GIT_PROMPT_DELETED$STATUS"
+  fi
+
+  if $(command git rev-parse --verify refs/stash >/dev/null 2>&1); then
+    STATUS="$ZSH_THEME_GIT_PROMPT_STASHED$STATUS"
+  fi
+
+  if $(echo "$INDEX" | grep '^UU ' &> /dev/null); then
+    STATUS="$ZSH_THEME_GIT_PROMPT_UNMERGED$STATUS"
+  fi
+
+  if $(echo "$INDEX" | grep '^## [^ ]\+ .*ahead' &> /dev/null); then
+    STATUS="$ZSH_THEME_GIT_PROMPT_AHEAD$STATUS"
+  fi
+
+  if $(echo "$INDEX" | grep '^## [^ ]\+ .*behind' &> /dev/null); then
+    STATUS="$ZSH_THEME_GIT_PROMPT_BEHIND$STATUS"
+  fi
+
+  if $(echo "$INDEX" | grep '^## [^ ]\+ .*diverged' &> /dev/null); then
+    STATUS="$ZSH_THEME_GIT_PROMPT_DIVERGED$STATUS"
+  fi
+
+  if [[ ! -z "$STATUS" ]]; then
+    echo " [ $STATUS]"
+  fi
+}
+
+
+prompt_git_branch() {
+    autoload -Uz vcs_info 
+    precmd_vcs_info() { vcs_info }
+    precmd_functions+=( precmd_vcs_info )
+    setopt prompt_subst
+    zstyle ':vcs_info:git:*' formats '%b'
+}
+
+prompt_git_info() {
+    [ ! -z "$vcs_info_msg_0_" ] && echo "$ZSH_THEME_GIT_PROMPT_PREFIX%F{white}$vcs_info_msg_0_%f$ZSH_THEME_GIT_PROMPT_SUFFIX"
+}
+
+prompt_purity_precmd() {
+    # Pass a line before each prompt
+    print -P ''
+}
+
+prompt_purification_setup() {
+    # Display git branch
+
+    autoload -Uz add-zsh-hook
+    add-zsh-hook precmd prompt_purity_precmd
+
+    ZSH_THEME_GIT_PROMPT_PREFIX=" %F{red}λ%f:"
+    ZSH_THEME_GIT_PROMPT_DIRTY=""
+    ZSH_THEME_GIT_PROMPT_CLEAN=""
+
+    ZSH_THEME_GIT_PROMPT_ADDED="%F{green}+%f "
+    ZSH_THEME_GIT_PROMPT_MODIFIED="%F{blue}%f "
+    ZSH_THEME_GIT_PROMPT_DELETED="%F{red}x%f "
+    ZSH_THEME_GIT_PROMPT_RENAMED="%F{magenta}➜%f "
+    ZSH_THEME_GIT_PROMPT_UNMERGED="%F{yellow}═%f "
+    ZSH_THEME_GIT_PROMPT_UNTRACKED="%F{white}%f "
+    ZSH_THEME_GIT_PROMPT_STASHED="%B%F{red}%f%b "
+    ZSH_THEME_GIT_PROMPT_BEHIND="%B%F{red}%f%b "
+    ZSH_THEME_GIT_PROMPT_AHEAD="%B%F{green}%f%b "
+
+    prompt_git_branch
+    RPROMPT='$(prompt_git_info) $(git_prompt_status)'
+    PROMPT=$'%F{white}%~ %B%F{blue}>%f%b '
+}
+
+prompt_purification_setup
+
