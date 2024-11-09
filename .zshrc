@@ -1,5 +1,6 @@
 #! /bin/zsh
 
+# ---------------- ETC STUFF -----------------
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_DATA_HOME="$XDG_CONFIG_HOME/local/share"
 export XDG_CACHE_HOME="$XDG_CONFIG_HOME/cache"
@@ -12,13 +13,14 @@ setopt HIST_SAVE_NO_DUPS
 autoload -U compinit; compinit
 _comp_options+=(globdots) # With hidden files
 
-# ---------------- ETC STUFF -----------------
 alias rzcomp="sudo ninja -C build install"
 alias rzformat="sys/clang-format.py -v -C /home/roeet/Etc/clang-format-16_linux-amd64"
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
 
 export PATH=$HOME/go/bin/gopls:$PATH
+
+bindkey -v
 
 # ---------------- COMPLETION ----------------
 
