@@ -30,7 +30,6 @@ require("lazy").setup({
 		{ "windwp/nvim-autopairs" }, -- auto pairs
 		{ "sindrets/diffview.nvim" }, -- nice showing of git diff
 		{ "numToStr/Comment.nvim" }, -- commenting plugin
-		{ "neovim/nvim-lspconfig" }, -- lsp server provider
 		{ "github/copilot.vim" }, -- copilot
 		{ "junegunn/fzf", build = "./install --bin" },
 		{
@@ -65,9 +64,6 @@ require("lazy").setup({
 ----------- PLUGINS -------------------------
 
 require("nvim-tree").setup({})
-
-require("lspconfig").pyright.setup({})
-require("lspconfig").clangd.setup({})
 
 require("nvim-web-devicons").setup({})
 
