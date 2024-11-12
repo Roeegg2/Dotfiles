@@ -22,6 +22,7 @@ export PATH=$HOME/go/bin/gopls:$PATH
 
 bindkey -v
 
+
 # ---------------- COMPLETION ----------------
 
   # ____ ___  __  __ ____  _     _____ _____ ___ ___  _   _ 
