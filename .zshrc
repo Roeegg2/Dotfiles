@@ -15,6 +15,7 @@ _comp_options+=(globdots) # With hidden files
 
 alias rzcomp="sudo ninja -C build install"
 alias rzformat="sys/clang-format.py -v -C /home/roeet/Etc/clang-format-16_linux-amd64"
+alias rzall="rzformat && rzcomp && cd test && rz-test"
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
 
