@@ -1,6 +1,7 @@
 #! /bin/zsh
 
 # ---------------- ETC STUFF -----------------
+# cmake -B build -DCMAKE_BUILD_TYPE=Debug -DCAPSTONE_BUILD_CSTOOL=ON -DCAPSTONE_BUILD_CSTEST=ON -DCAPSTONE_ARCHITECTURE_DEFAULT=OFF -DCAPSTONE_BPF_SUPPORT=ON
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_DATA_HOME="$XDG_CONFIG_HOME/local/share"
 export XDG_CACHE_HOME="$XDG_CONFIG_HOME/cache"
@@ -16,6 +17,12 @@ _comp_options+=(globdots) # With hidden files
 alias rzcomp="sudo ninja -C build install"
 alias rzformat="sys/clang-format.py -v -C /home/roeet/Etc/clang-format-16_linux-amd64"
 alias rzall="rzformat && rzcomp && cd test && rz-test"
+
+alias bpfcomp="clang -target bpf bpf.S -c -o bpf.o"
+alias bpfdisas="objdump -d bpf.o"
+
+alias cpcomp="cmake --build build && sudo cmake --install build"
+
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
 
