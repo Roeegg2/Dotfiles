@@ -125,12 +125,10 @@ require("lazy").setup({
             luasnip.lsp_expand(args.body)
           end,
         },
-        mapping = cmp.mapping.preset.insert({
-          ['<C-b>'] = cmp.mapping.scroll_docs(-4),
-          ['<C-f>'] = cmp.mapping.scroll_docs(4),
-          ['<C-Space>'] = cmp.mapping.complete(),
-          ['<C-e>'] = cmp.mapping.abort(),
-          ['<CR>'] = cmp.mapping.confirm({ select = true }),
+        cmp.setup({
+          mapping = cmp.mapping.preset.insert({
+            ['<CR>'] = cmp.mapping.confirm({ select = false }),
+          })
         }),
         sources = cmp.config.sources({
           { name = 'nvim_lsp' },
@@ -144,6 +142,16 @@ require("lazy").setup({
       require('luasnip.loaders.from_vscode').lazy_load()
     end
   },
+
+  -- Autopairs
+  {
+    "windwp/nvim-autopairs",
+    event = "InsertEnter",
+    config = true
+  },
+
+  -- GitHub copilot
+  { "github/copilot.vim" },
 
   -- FZF-lua for fuzzy finding
   { "junegunn/fzf", build = "./install --bin" },
@@ -202,3 +210,5 @@ vim.keymap.set("n", "<c-P>", require("fzf-lua").files, { desc = "Fzf Files" })
 vim.keymap.set("n", "<c-L>", require("fzf-lua").live_grep_glob, { desc = "Fzf Live Global Grep" })
 vim.keymap.set("n", "<c-B>", require("fzf-lua").buffers, { desc = "Fzf Buffers" })
 
+vim.g.copilot_no_tab_map = true
+vim.api.nvim_set_keymap("i", "<C-J>", 'copilot#Accept("<CR>")', { silent = true, expr = true })
