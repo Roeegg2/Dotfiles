@@ -161,7 +161,16 @@ require("lazy").setup({
 		dependencies = { "nvim-tree/nvim-web-devicons" },
 		config = function()
 			-- calling `setup` is optional for customization
-			require("fzf-lua").setup({})
+      local actions = require("fzf-lua.actions")
+			require("fzf-lua").setup({
+        grep = {
+          actions = {
+            -- swapping the bindings for ctrl-r so ctrl-g matches files
+            ["ctrl-r"] = { actions.grep_lgrep },
+            ["ctrl-g"] = { actions.toggle_ignore },
+          }
+        },
+      })
 		end,
 	},
 
@@ -182,6 +191,7 @@ require("lazy").setup({
       require("nvim-tree").setup({
         view = { width = 30 },
         renderer = { group_empty = true },
+        git = { ignore = false },
       })
       vim.keymap.set('n', '<C-y>', ':NvimTreeToggle<CR>', {})
     end
@@ -194,10 +204,9 @@ vim.opt.tabstop = 2
 vim.opt.shiftwidth = 2
 vim.opt.expandtab = true
 vim.opt.smartindent = true
-vim.opt.wrap = false
+vim.opt.wrap = true
 vim.opt.swapfile = false
 vim.opt.backup = false
-vim.opt.hlsearch = false
 vim.opt.incsearch = true
 vim.opt.termguicolors = true
 vim.opt.scrolloff = 8
