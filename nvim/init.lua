@@ -20,34 +20,6 @@ vim.g.maplocalleader = " "
 
 -- Lazy plugin setup
 require("lazy").setup({
-  -- Colorscheme
-  {
-    'navarasu/onedark.nvim',
-    priority = 1000,
-    config = function()
-      require('onedark').setup {
-        style = 'darker'
-      }
-      require('onedark').load()
-    end,
-  },
-
-  -- Treesitter for better syntax highlighting
-  {
-    'nvim-treesitter/nvim-treesitter',
-    build = ':TSUpdate',
-    config = function()
-      require('nvim-treesitter.configs').setup {
-        ensure_installed = { 
-          "rust", "c", "cpp", "lua", "python", 
-          "bash", "markdown", "vim", "vimdoc" 
-        },
-        highlight = { enable = true },
-        indent = { enable = true },
-      }
-    end
-  },
-
   -- LSP Configuration
   {
     'neovim/nvim-lspconfig',
@@ -59,8 +31,8 @@ require("lazy").setup({
     config = function()
       require('mason').setup()
       require('mason-lspconfig').setup({
-        ensure_installed = { 
-          "rust_analyzer", 
+        ensure_installed = {
+          "rust_analyzer",
           "clangd",  -- for C/C++
           "lua_ls"   -- for Lua
         }
@@ -72,13 +44,6 @@ require("lazy").setup({
       -- Rust LSP
       lspconfig.rust_analyzer.setup {
         capabilities = capabilities,
-        settings = {
-          ['rust-analyzer'] = {
-            diagnostics = {
-              enable = true,
-            }
-          }
-        }
       }
 
       -- C/C++ LSP
@@ -150,9 +115,6 @@ require("lazy").setup({
     config = true
   },
 
-  -- GitHub copilot
-  { "github/copilot.vim" },
-
   -- FZF-lua for fuzzy finding
   { "junegunn/fzf", build = "./install --bin" },
  	{
@@ -173,15 +135,6 @@ require("lazy").setup({
       })
 		end,
 	},
-
-
-  -- Git integration
-  {
-    'lewis6991/gitsigns.nvim',
-    config = function()
-      require('gitsigns').setup()
-    end
-  },
 
   -- File tree
   {
@@ -213,8 +166,9 @@ vim.opt.scrolloff = 8
 vim.opt.signcolumn = "yes"
 
 -- stuff I've set up
-
+vim.cmd("colorscheme vim")
 vim.cmd("command! FF Fzf")
+
 vim.keymap.set("n", "<c-P>", require("fzf-lua").files, { desc = "Fzf Files" })
 vim.keymap.set("n", "<c-L>", require("fzf-lua").live_grep_glob, { desc = "Fzf Live Global Grep" })
 vim.keymap.set("n", "<c-B>", require("fzf-lua").buffers, { desc = "Fzf Buffers" })
