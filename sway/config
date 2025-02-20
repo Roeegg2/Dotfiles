@@ -211,18 +211,28 @@ bindsym $mod+r mode "resize"
 # Status Bar:
 #
 # Read `man 5 sway-bar` for more information about this section.
+
+# Swaybar configuration
+
+# Swaybar configuration with time, date, CPU, and memory info
+
 bar {
     position top
 
-    # When the status_command prints a new line to stdout, swaybar updates.
-    # The default just shows the current date and time.
-    status_command while date +'%Y-%m-%d %X'; do sleep 1; done
-
     colors {
-        statusline #ffffff
-        background #323232
-        inactive_workspace #32323200 #32323200 #5c5c5c
+        background #282828
+        statusline #ebdbb2
+        separator  #928374
     }
+
+    font pango:DejaVu Sans Mono, 10
+    workspace_buttons yes
+    binding_mode_indicator yes
+    height 30
+
+    # Use the custom script for the status command
+    status_command ~/.config/sway/swaybar_status.sh
 }
+
 
 include /etc/sway/config.d/*
