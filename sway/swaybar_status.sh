@@ -9,8 +9,11 @@ while true; do
     # Get memory usage (used / total)
     MEM=$(free -h | grep Mem | awk '{print $3 "/" $2}')
     
+    # Get volume level
+    VOL=$(pactl get-sink-volume @DEFAULT_SINK@ | awk '{print $5}')
+    
     # Output the status in the desired format
-    echo "Time: $TIME | CPU: $CPU | MEM: $MEM"
+    echo "MEM: $MEM | CPU: $CPU | TIME: $TIME | VOL: $VOL"
     
     # Sleep for 1 second before updating
     sleep 1
