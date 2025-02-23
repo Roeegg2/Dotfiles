@@ -234,5 +234,11 @@ bar {
     status_command ~/.config/sway/swaybar_status.sh
 }
 
+input "type:keyboard" {
+    xkb_layout us,il
+    # xkb_variant nodeadkeys,
+    xkb_options grp:alt_shift_toggle
+}
+
 
 include /etc/sway/config.d/*
