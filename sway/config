@@ -21,7 +21,8 @@ set $menu wmenu-run
 ### Output configuration
 #
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
-output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
+# output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
+output * bg ~/Dotfiles/background.jpg fill
 #
 # Example configuration:
 #
@@ -242,3 +243,6 @@ input "type:keyboard" {
 
 
 include /etc/sway/config.d/*
+
+bindsym Shift+Print exec grim -g "$(slurp)" ~/screenshot-$(date +'%Y-%m-%d_%H-%M-%S').png
+

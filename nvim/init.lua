@@ -149,6 +149,21 @@ require("lazy").setup({
       vim.keymap.set('n', '<C-y>', ':NvimTreeToggle<CR>', {})
     end
   },
+
+  -- Stupid copilot
+  {
+    'github/copilot.vim'
+  },
+
+  -- Theme
+  {
+    'navarasu/onedark.nvim',
+    config = function()
+      require('onedark').setup({
+        transparent = true,
+      })
+    end
+  },
 })
 
 -- General Neovim Settings
@@ -166,7 +181,7 @@ vim.opt.scrolloff = 8
 vim.opt.signcolumn = "yes"
 
 -- stuff I've set up
-vim.cmd("colorscheme vim")
+vim.cmd("colorscheme onedark")
 vim.cmd("command! FF Fzf")
 
 vim.keymap.set("n", "<c-P>", require("fzf-lua").files, { desc = "Fzf Files" })

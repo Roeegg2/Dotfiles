@@ -1,0 +1,11 @@
+[Unit]
+Description=Gammastep - Blue light filter
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/gammastep -r
+Restart=always
+
+[Install]
+WantedBy=default.target
+
