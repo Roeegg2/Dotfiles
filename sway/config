@@ -206,9 +206,23 @@ bindsym $mod+r mode "resize"
     bindsym --locked XF86MonBrightnessDown exec brightnessctl set 5%-
     bindsym --locked XF86MonBrightnessUp exec brightnessctl set 5%+
     # Special key to take a screenshot with grim
-    bindsym Print exec grim
+    # Screenshot with custom name (full screen)
+    bindsym Ctrl+Print exec mkdir -p ~/Screenshots && TEMPFILE=$(mktemp /tmp/screenshot.XXXXXX.png) && grim - | swappy -f - -o "$TEMPFILE" && FILENAME=$(wofi --show dmenu --prompt "Enter screenshot name (without .png)") && [ -n "$FILENAME" ] && mv "$TEMPFILE" ~/Screenshots/"$FILENAME".png && notify-send "Screenshot saved as $FILENAME.png" || rm "$TEMPFILE"
+# Screenshot with custom name (region)
+    bindsym Ctrl+Shift+Print exec mkdir -p ~/Screenshots && TEMPFILE=$(mktemp /tmp/screenshot.XXXXXX.png) && grim -g "$(slurp)" - | swappy -f - -o "$TEMPFILE" && FILENAME=$(wofi --show dmenu --prompt "Enter screenshot name (without .png)") && [ -n "$FILENAME" ] && mv "$TEMPFILE" ~/Screenshots/"$FILENAME".png && notify-send "Screenshot saved as $FILENAME.png" || rm "$TEMPFILE"
+    # Media controls via playerctl
+    bindsym --locked XF86AudioPlay exec playerctl --player=spotify play-pause
+    bindsym --locked XF86AudioNext exec playerctl --player=spotify next
+    bindsym --locked XF86AudioPrev exec playerctl --player=spotify previous
+    # Open Spotify as default media player
+    bindsym --locked XF86Tools exec spotify-launcher
 
-#
+exec swayidle -w \
+    timeout 300 'swaylock -f -c 000000' \
+    timeout 600 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' \
+    timeout 900 'systemctl suspend' \
+    before-sleep 'swaylock -f -c 000000'
+
 # Status Bar:
 #
 # Read `man 5 sway-bar` for more information about this section.
@@ -243,6 +257,3 @@ input "type:keyboard" {
 
 
 include /etc/sway/config.d/*
-
-bindsym Shift+Print exec grim -g "$(slurp)" ~/screenshot-$(date +'%Y-%m-%d_%H-%M-%S').png
-

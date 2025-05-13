@@ -150,17 +150,27 @@ require("lazy").setup({
     end
   },
 
-  -- Stupid copilot
-  {
-    'github/copilot.vim'
-  },
-
   -- Theme
   {
     'navarasu/onedark.nvim',
     config = function()
       require('onedark').setup({
         transparent = true,
+      })
+    end
+  },
+
+  {
+    'projekt0n/github-nvim-theme',
+    config = function()
+      require('github-theme').setup({
+        options = {
+          styles = {
+            transparent = true,
+            comments = "italic",
+            functions = "italic",
+          }
+        }
       })
     end
   },
@@ -181,12 +191,9 @@ vim.opt.scrolloff = 8
 vim.opt.signcolumn = "yes"
 
 -- stuff I've set up
-vim.cmd("colorscheme onedark")
+vim.cmd("colorscheme retrobox")
 vim.cmd("command! FF Fzf")
 
 vim.keymap.set("n", "<c-P>", require("fzf-lua").files, { desc = "Fzf Files" })
 vim.keymap.set("n", "<c-L>", require("fzf-lua").live_grep_glob, { desc = "Fzf Live Global Grep" })
 vim.keymap.set("n", "<c-B>", require("fzf-lua").buffers, { desc = "Fzf Buffers" })
-
-vim.g.copilot_no_tab_map = true
-vim.api.nvim_set_keymap("i", "<C-J>", 'copilot#Accept("<CR>")', { silent = true, expr = true })
