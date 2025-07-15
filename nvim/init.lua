@@ -184,9 +184,9 @@ require("lazy").setup({
     'github/copilot.vim',
   },
 
-  {
-    'wakatime/vim-wakatime', lazy = false,
-  },
+  -- {
+  --   'wakatime/vim-wakatime', lazy = false,
+  -- },
 
   {
     'Piotr1215/typeit.nvim',
