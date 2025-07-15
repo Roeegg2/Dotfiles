@@ -1,0 +1,63 @@
+{
+    "position": "top",
+    "height": 34,
+    "spacing": 4,
+    "modules-left": ["sway/workspaces", "sway/mode", "sway/window"],
+    "modules-center": ["clock"],
+    "modules-right": ["pulseaudio", "memory", "cpu", "battery", "tray"],
+    "sway/workspaces": {
+        "disable-scroll": false,
+        "all-outputs": true,
+        "sort-by-number": true,
+    },
+    "sway/window": {
+        "format": "{title}",
+        "max-length": 50,
+        "all-outputs": true
+    },
+    "clock": {
+        "format": "{:%b %d %H:%M}",
+        "format-alt": "{:%Y-%m-%d %H:%M:%S}",
+        "interval": 1,
+        "tooltip-format": "{:%A, %B %d, %Y}",
+        "on-click": "gsimplecal"
+    },
+    "cpu": {
+        "format": " {usage}%",
+        "interval": 2,
+        "tooltip": true,
+        "tooltip-format": "CPU: {usage}% ({avg_frequency} GHz)"
+    },
+    "memory": {
+        "format": "󰍛 {used:0.1f}G/{total:0.1f}G",
+        "interval": 2,
+        "tooltip": true,
+        "tooltip-format": "Memory: {percentage}%"
+    },
+    "pulseaudio": {
+        "format": "{volume}% {icon}",
+        "format-muted": "󰝟 MUTED",
+        "icons": {
+            "headphone": "",
+            "headset": "",
+            "default": ""
+        },
+        "on-click": "pavucontrol",
+        "tooltip-format": "Volume: {volume}%"
+    },
+    "battery": {
+        "states": {
+            "warning": 30,
+            "critical": 15
+        },
+        "format": "{icon} {capacity}%",
+        "format-charging": "󰂄 {capacity}%",
+        "format-plugged": "󰂄 {capacity}%",
+        "format-icons": ["󰂃", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"],
+        "tooltip-format": "Battery: {capacity}% ({time_to_empty})"
+    },
+    "tray": {
+        "spacing": 8,
+        "icon-size": 16
+    }
+}

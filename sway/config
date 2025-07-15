@@ -232,22 +232,29 @@ bindsym $mod+r mode "resize"
 # Swaybar configuration with time, date, CPU, and memory info
 
 bar {
-    position top
-
-    colors {
-        background #282828
-        statusline #ebdbb2
-        separator  #928374
-    }
-
-    font pango:DejaVu Sans Mono, 10
-    workspace_buttons yes
-    binding_mode_indicator yes
-    height 30
-
-    # Use the custom script for the status command
-    status_command ~/.config/sway/swaybar_status.sh
+    swaybar_command waybar
 }
+#
+# bar {
+#     position top
+#
+#     colors {
+#         background #282828
+#         statusline #ebdbb2
+#         separator  #928374
+#     }
+#
+#     font pango:DejaVu Sans Mono, 10
+#     workspace_buttons yes
+#     binding_mode_indicator yes
+#     height 30
+#
+#     # Use the custom script for the status command
+#     status_command ~/.config/sway/swaybar_status.sh
+# }
+
+exec env LANG=en_US.UTF-8 nm-applet
+exec env XDG_CURRENT_DESKTOP=sway LANG=en_US.UTF-8 blueman-applet
 
 input type:keyboard {
     xkb_layout "us,il,epo"
@@ -255,3 +262,4 @@ input type:keyboard {
 }
 
 include /etc/sway/config.d/*
+exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway LANG=en_US.UTF-8

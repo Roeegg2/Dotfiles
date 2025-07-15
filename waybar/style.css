@@ -1,0 +1,78 @@
+* {
+    font-family: JetBrains Mono, FontAwesome;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+#waybar {
+    background: rgba(40, 40, 40, 0.9);
+    color: #ebdbb2;
+    border-radius: 0 0 8px 8px;
+    transition: background-color 0.3s;
+}
+
+#workspaces button {
+    padding: 0 8px;
+    margin: 0 4px;
+    color: #ebdbb2;
+    background: transparent;
+    border: none;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+#workspaces button:hover {
+    background: rgba(235, 219, 178, 0.2);
+    color: #fbf1c7;
+}
+
+#workspaces button.focused {
+    background: #d79921;
+    color: #282828;
+}
+
+#workspaces button.urgent {
+    color: #fb4934;
+    background: rgba(251, 73, 52, 0.3);
+}
+
+#window {
+    padding: 0 12px;
+    font-style: italic;
+}
+
+#clock, #cpu, #memory, #pulseaudio, #battery, #tray {
+    padding: 0 12px;
+    margin: 0 4px;
+    color: #ebdbb2;
+    background: rgba(46, 46, 46, 0.8);
+    border-radius: 4px;
+}
+
+#clock {
+    font-weight: 700;
+}
+
+#pulseaudio.muted {
+    color: #928374;
+}
+
+#battery.warning {
+    color: #d79921;
+}
+
+#battery.critical {
+    color: #fb4934;
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    50% { opacity: 0.5; }
+}
+
+tooltip {
+    background: #282828;
+    border: 1px solid #d79921;
+    border-radius: 4px;
+    color: #ebdbb2;
+}
