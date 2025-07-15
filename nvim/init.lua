@@ -108,11 +108,12 @@ require("lazy").setup({
     end
   },
 
-  -- Autopairs
   {
-    "windwp/nvim-autopairs",
+    'windwp/nvim-autopairs',
     event = "InsertEnter",
     config = true
+    -- use opts = {} for passing setup options
+    -- this is equivalent to setup({}) function
   },
 
   -- FZF-lua for fuzzy finding
@@ -155,23 +156,46 @@ require("lazy").setup({
     'navarasu/onedark.nvim',
     config = function()
       require('onedark').setup({
-        transparent = true,
+        transparent = false,
       })
     end
   },
 
   {
-    'projekt0n/github-nvim-theme',
+    'ellisonleao/gruvbox.nvim',
     config = function()
-      require('github-theme').setup({
-        options = {
-          styles = {
-            transparent = true,
-            comments = "italic",
-            functions = "italic",
-          }
-        }
+      require('gruvbox').setup({
+        contrast = "hard", -- or "soft"
+        transparent_mode = false,
       })
+    end
+  },
+
+  {
+    'folke/tokyonight.nvim',
+    config = function()
+      require('tokyonight').setup({
+        transparent = false,
+      })
+    end
+  },
+
+  {
+    'github/copilot.vim',
+  },
+
+  {
+    'wakatime/vim-wakatime', lazy = false,
+  },
+
+  {
+    'Piotr1215/typeit.nvim',
+    config = function()
+        require('typeit').setup({
+          default_speed = 30,    -- Default typing speed (milliseconds)
+          default_pause = 'line' -- Default pause behavior ('line' or 'paragraph')
+            -- Your configuration here
+        })
     end
   },
 })
@@ -191,9 +215,12 @@ vim.opt.scrolloff = 8
 vim.opt.signcolumn = "yes"
 
 -- stuff I've set up
-vim.cmd("colorscheme retrobox")
+vim.cmd("colorscheme onedark")
 vim.cmd("command! FF Fzf")
 
 vim.keymap.set("n", "<c-P>", require("fzf-lua").files, { desc = "Fzf Files" })
 vim.keymap.set("n", "<c-L>", require("fzf-lua").live_grep_glob, { desc = "Fzf Live Global Grep" })
 vim.keymap.set("n", "<c-B>", require("fzf-lua").buffers, { desc = "Fzf Buffers" })
+
+vim.g.copilot_no_tab_map = true
+vim.api.nvim_set_keymap("i", "<C-J>", 'copilot#Accept("<CR>")', { silent = true, expr = true })

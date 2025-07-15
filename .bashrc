@@ -12,3 +12,5 @@ PS1='[\u@\h \W]\$ '
 
 # Making Vi bindings
 set -o vi
+
+alias start='sway --unsupported-gpu'
