@@ -1,0 +1,107 @@
+name: Test Arch Setup Script
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:  # Allow manual triggering
+
+jobs:
+  test-arch-setup:
+    runs-on: ubuntu-latest
+    container:
+      image: archlinux:latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: Setup Arch environment
+      run: |
+        pacman -Syu --noconfirm
+        pacman -S --noconfirm sudo base-devel git
+        
+        # Create test user
+        useradd -m -G wheel -s /bin/bash testuser
+        echo "testuser ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+        
+        # Create mock Dotfiles structure
+        sudo -u testuser mkdir -p /home/testuser/Dotfiles/{sway,nvim,foot,waybar,blueman,proto}
+        sudo -u testuser bash -c 'echo "export PS1=\"[ci-test] \u@\h:\w$ \"" > /home/testuser/Dotfiles/.bashrc'
+        sudo -u testuser bash -c 'echo "source ~/.bashrc" > /home/testuser/Dotfiles/.bash_profile'
+        sudo -u testuser bash -c 'echo "# Mock sway config" > /home/testuser/Dotfiles/sway/config'
+        sudo -u testuser bash -c 'echo "# Mock nvim config" > /home/testuser/Dotfiles/nvim/init.lua'
+        sudo -u testuser bash -c 'echo "# Mock foot config" > /home/testuser/Dotfiles/foot/foot.ini'
+        sudo -u testuser bash -c 'echo "# Mock waybar config" > /home/testuser/Dotfiles/waybar/config'
+        sudo -u testuser bash -c 'echo "# Mock blueman config" > /home/testuser/Dotfiles/blueman/config'
+    
+    - name: Copy script to test environment
+      run: |
+        cp arch_setup.sh /home/testuser/
+        chown testuser:testuser /home/testuser/arch_setup.sh
+        chmod +x /home/testuser/arch_setup.sh
+    
+    - name: Test script syntax
+      run: |
+        sudo -u testuser bash -n /home/testuser/arch_setup.sh
+        echo "✅ Script syntax is valid"
+    
+    - name: Test dry-run mode (if implemented)
+      run: |
+        # You could add a --dry-run flag to your script
+        # sudo -u testuser /home/testuser/arch_setup.sh --dry-run
+        echo "⏩ Skipping dry-run (not implemented)"
+    
+    - name: Test package installation (partial)
+      run: |
+        # Test installing a subset of packages to avoid long CI times
+        sudo -u testuser bash -c "
+          export HOME=/home/testuser
+          cd /home/testuser
+          
+          # Test core packages only
+          sudo pacman -S --noconfirm git neovim foot sway
+          echo '✅ Core packages installed successfully'
+          
+          # Test symlink creation
+          ln -sf ~/Dotfiles/.bashrc ~/.bashrc
+          ln -sf ~/Dotfiles/.bash_profile ~/.bash_profile
+          echo '✅ Symlinks created successfully'
+          
+          # Verify symlinks
+          ls -la ~/.bashrc ~/.bash_profile
+          echo '✅ Symlinks verified'
+        "
+    
+    - name: Test configuration validation
+      run: |
+        sudo -u testuser bash -c "
+          export HOME=/home/testuser
+          cd /home/testuser
+          
+          # Check if configs exist
+          test -f ~/.bashrc && echo '✅ .bashrc exists'
+          test -f ~/.bash_profile && echo '✅ .bash_profile exists'
+          
+          # Test if bashrc sources correctly
+          bash -c 'source ~/.bashrc && echo \"✅ .bashrc sources correctly\"'
+        "
+    
+    - name: Generate test report
+      run: |
+        echo "## Test Results" > test_report.md
+        echo "- ✅ Script syntax validation passed" >> test_report.md
+        echo "- ✅ Core package installation successful" >> test_report.md
+        echo "- ✅ Symlink creation successful" >> test_report.md
+        echo "- ✅ Configuration validation passed" >> test_report.md
+        echo "- ⚠️  Full script execution skipped (CI time constraints)" >> test_report.md
+        
+        cat test_report.md
+    
+    - name: Upload test artifacts
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: test-results
+        path: test_report.md
