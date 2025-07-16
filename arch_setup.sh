@@ -110,9 +110,6 @@ packages=(
     
     # Fonts
     ttf-dejavu ttf-liberation noto-fonts
-    
-    # Development extras
-    wakatime
 )
 
 # Install packages
@@ -150,7 +147,6 @@ cd "$HOME/AUR"
 aur_packages=(
     "jellyfin-media-player"
     "zoom"
-    "paru"  # Better AUR helper
 )
 
 install_aur_package() {
@@ -187,6 +183,9 @@ fi
 if ! git config --global user.email >/dev/null 2>&1; then
     warn "Git user.email not configured. Set it with: git config --global user.email 'your.email@example.com'"
 fi
+
+log "Setting Neovim as git editor"
+git config --global core.editor "nvim"
 
 # Source the new bashrc
 source "$HOME/.bashrc" 2>/dev/null || true
