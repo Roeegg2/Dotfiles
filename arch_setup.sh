@@ -88,7 +88,7 @@ packages=(
     
     # CLI utilities
     ripgrep fzf wget curl tree htop
-    luarocks lua
+    luarocks lua less
     
     # Audio
     pipewire pipewire-pulse pavucontrol
