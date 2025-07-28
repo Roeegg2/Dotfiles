@@ -100,10 +100,10 @@ packages=(
     blueman
     
     # File manager
-    thunar thunar-archive-plugin
+    nautilus
     
     # System utilities
-    wl-clipboard xdg-utils
+    wl-clipboard xdg-utils fakeroot debugedit grim
     
     # Applications
     spotify-launcher firefox

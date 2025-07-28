@@ -108,13 +108,13 @@ require("lazy").setup({
     end
   },
 
-  {
-    'windwp/nvim-autopairs',
-    event = "InsertEnter",
-    config = true
-    -- use opts = {} for passing setup options
-    -- this is equivalent to setup({}) function
-  },
+  -- {
+  --   'windwp/nvim-autopairs',
+  --   event = "InsertEnter",
+  --   config = true
+  --   -- use opts = {} for passing setup options
+  --   -- this is equivalent to setup({}) function
+  -- },
 
   -- FZF-lua for fuzzy finding
   { "junegunn/fzf", build = "./install --bin" },
@@ -129,7 +129,7 @@ require("lazy").setup({
         grep = {
           actions = {
             -- swapping the bindings for ctrl-r so ctrl-g matches files
-            ["ctrl-r"] = { actions.grep_lgrep },
+           ["ctrl-r"] = { actions.grep_lgrep },
             ["ctrl-g"] = { actions.toggle_ignore },
           }
         },
@@ -224,3 +224,43 @@ vim.keymap.set("n", "<c-B>", require("fzf-lua").buffers, { desc = "Fzf Buffers" 
 
 vim.g.copilot_no_tab_map = true
 vim.api.nvim_set_keymap("i", "<C-J>", 'copilot#Accept("<CR>")', { silent = true, expr = true })
+
+vim.api.nvim_create_user_command('ReplaceWord', function(opts)
+  -- Ensure we have exactly two arguments
+  if #opts.fargs ~= 2 then
+    vim.notify('ReplaceWord requires exactly two arguments: oldword newword', vim.log.levels.ERROR)
+    return
+  end
+
+  local old = opts.fargs[1]
+  local new = opts.fargs[2]
+
+  -- Escape special characters for the substitution
+  old = vim.fn.escape(old, '/\\')
+  new = vim.fn.escape(new, '/\\')
+
+  -- Get list of Git-tracked files
+  local files = vim.fn.systemlist('git ls-files 2>/dev/null')
+  if vim.v.shell_error ~= 0 then
+    vim.notify('Error: Not in a Git repository or git ls-files failed', vim.log.levels.ERROR)
+    return
+  end
+
+  if #files == 0 then
+    vim.notify('No files found in Git repository', vim.log.levels.WARN)
+    return
+  end
+
+  -- Iterate over files
+  for _, file in ipairs(files) do
+    -- Ensure file exists and is readable
+    if vim.fn.filereadable(file) == 1 then
+      pcall(function()
+        vim.cmd('edit +0 ' .. vim.fn.fnameescape(file))
+        vim.cmd('silent! %s/' .. old .. '/' .. new .. '/g')
+        vim.cmd('update')
+      end)
+    end
+  end
+  vim.notify('Replacement complete in Git-tracked files', vim.log.levels.INFO)
+end, { nargs = '+' })
