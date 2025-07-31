@@ -14,3 +14,6 @@ PS1='[\u@\h \W]\$ '
 set -o vi
 
 alias start='sway --unsupported-gpu'
+
+# Created by `pipx` on 2025-07-30 10:09:46
+export PATH="$PATH:/home/roeet/.local/bin"
