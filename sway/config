@@ -207,9 +207,9 @@ bindsym $mod+r mode "resize"
     bindsym --locked XF86MonBrightnessUp exec brightnessctl set 5%+
     # Special key to take a screenshot with grim
     # Screenshot with custom name (full screen)
-    bindsym Ctrl+Print exec mkdir -p ~/Screenshots && TEMPFILE=$(mktemp /tmp/screenshot.XXXXXX.png) && grim - | swappy -f - -o "$TEMPFILE" && FILENAME=$(wofi --show dmenu --prompt "Enter screenshot name (without .png)") && [ -n "$FILENAME" ] && mv "$TEMPFILE" ~/Screenshots/"$FILENAME".png && rm "$TEMPFILE"
+    bindsym $mod+Shift+Escape exec mkdir -p ~/Screenshots && TEMPFILE=$(mktemp /tmp/screenshot.XXXXXX.png) && grim - | swappy -f - -o "$TEMPFILE" && FILENAME=$(wofi --show dmenu --prompt "Enter screenshot name (without .png)") && [ -n "$FILENAME" ] && mv "$TEMPFILE" ~/Screenshots/"$FILENAME".png && rm "$TEMPFILE"
 # Screenshot with custom name (region)
-    bindsym Ctrl+Shift+Print exec mkdir -p ~/Screenshots && TEMPFILE=$(mktemp /tmp/screenshot.XXXXXX.png) && grim -g "$(slurp)" - | swappy -f - -o "$TEMPFILE" && FILENAME=$(wofi --show dmenu --prompt "Enter screenshot name (without .png)") && [ -n "$FILENAME" ] && mv "$TEMPFILE" ~/Screenshots/"$FILENAME".png && rm "$TEMPFILE"
+    bindsym $mod+Escape exec mkdir -p ~/Screenshots && TEMPFILE=$(mktemp /tmp/screenshot.XXXXXX.png) && grim -g "$(slurp)" - | swappy -f - -o "$TEMPFILE" && FILENAME=$(wofi --show dmenu --prompt "Enter screenshot name (without .png)") && [ -n "$FILENAME" ] && mv "$TEMPFILE" ~/Screenshots/"$FILENAME".png && rm "$TEMPFILE"
     # Media controls via playerctl
     bindsym --locked XF86AudioPlay exec playerctl --player=spotify play-pause
     bindsym --locked XF86AudioNext exec playerctl --player=spotify next
@@ -252,6 +252,8 @@ bar {
 #     # Use the custom script for the status command
 #     status_command ~/.config/sway/swaybar_status.sh
 # }
+
+# output DP-3 mode 1920x1080@144.001Hz
 
 exec env LANG=en_US.UTF-8 nm-applet
 exec env XDG_CURRENT_DESKTOP=sway LANG=en_US.UTF-8 blueman-applet

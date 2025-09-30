@@ -4,7 +4,7 @@
     "spacing": 4,
     "modules-left": ["sway/workspaces", "sway/mode", "sway/window"],
     "modules-center": ["clock"],
-    "modules-right": ["pulseaudio", "memory", "cpu", "battery", "tray"],
+    "modules-right": ["custom/kdeconnect", "pulseaudio", "memory", "cpu", "battery", "tray"],
     "sway/workspaces": {
         "disable-scroll": false,
         "all-outputs": true,
@@ -35,7 +35,7 @@
         "tooltip-format": "Memory: {percentage}%"
     },
     "pulseaudio": {
-        "format": "{volume}% {icon}",
+        "format": "{volume}%",
         "format-muted": "󰝟 MUTED",
         "icons": {
             "headphone": "",
@@ -44,6 +44,11 @@
         },
         "on-click": "pavucontrol",
         "tooltip-format": "Volume: {volume}%"
+    },
+    "custom/kdeconnect": {
+        "format": "󰄜",
+        "tooltip": true,
+        "on-click": "kdeconnect-app"
     },
     "battery": {
         "states": {
@@ -59,5 +64,5 @@
     "tray": {
         "spacing": 8,
         "icon-size": 16
-    }
+    },
 }

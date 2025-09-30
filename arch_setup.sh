@@ -91,7 +91,7 @@ packages=(
     luarocks lua less
     
     # Audio
-    pipewire pipewire-pulse pavucontrol
+    pipewire pipewire-pulse pavucontrol vlc
     
     # Network
     networkmanager nm-connection-editor network-manager-applet
@@ -106,7 +106,7 @@ packages=(
     wl-clipboard xdg-utils fakeroot debugedit grim
     
     # Applications
-    spotify-launcher firefox
+    spotify-launcher firefox kdeconnect
     
     # Fonts
     ttf-dejavu ttf-liberation noto-fonts
