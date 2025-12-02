@@ -22,52 +22,64 @@ vim.g.maplocalleader = " "
 require("lazy").setup({
   -- LSP Configuration
   {
-    'neovim/nvim-lspconfig',
-    dependencies = {
-      'williamboman/mason.nvim',
-      'williamboman/mason-lspconfig.nvim',
-      'hrsh7th/cmp-nvim-lsp',
-    },
-    config = function()
-      require('mason').setup()
-      require('mason-lspconfig').setup({
-        ensure_installed = {
-          "rust_analyzer",
-          "clangd",  -- for C/C++
-          "lua_ls"   -- for Lua
-        }
-      })
-
-      local capabilities = require('cmp_nvim_lsp').default_capabilities()
-      local lspconfig = require('lspconfig')
-
-      -- Rust LSP
-      lspconfig.rust_analyzer.setup {
-        capabilities = capabilities,
+  'neovim/nvim-lspconfig',
+  dependencies = {
+    'williamboman/mason.nvim',
+    'williamboman/mason-lspconfig.nvim',
+    'hrsh7th/cmp-nvim-lsp',
+  },
+  config = function()
+    require('mason').setup()
+    require('mason-lspconfig').setup({
+      ensure_installed = {
+        "rust_analyzer",
+        "clangd",
+        "lua_ls"
       }
+    })
 
-      -- C/C++ LSP
-      lspconfig.clangd.setup {
-        capabilities = capabilities,
-      }
+    local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
-      -- Lua LSP
-      lspconfig.lua_ls.setup {
-        capabilities = capabilities,
-        settings = {
-          Lua = {
-            diagnostics = {
-              globals = { 'vim' }
-            }
+    -- Using the new vim.lsp.config API (Neovim 0.11+)
+    
+    -- Rust
+    vim.lsp.config('rust_analyzer', {
+      cmd = { 'rust-analyzer' },
+      root_markers = { 'Cargo.toml', 'rust-project.json' },
+      capabilities = capabilities,
+    })
+
+    -- C/C++
+    vim.lsp.config('clangd', {
+      cmd = { 'clangd' },
+      root_markers = { 'compile_commands.json', '.git' },
+      capabilities = capabilities,
+    })
+
+    -- Lua
+    vim.lsp.config('lua_ls', {
+      cmd = { 'lua-language-server' },
+      root_markers = { '.luarc.json', '.git' },
+      capabilities = capabilities,
+      settings = {
+        Lua = {
+          diagnostics = {
+            globals = { 'vim' }
           }
         }
       }
+    })
 
-      -- Keymaps for LSP
-      vim.keymap.set('n', 'K', vim.lsp.buf.hover, {})
-      vim.keymap.set('n', 'gd', vim.lsp.buf.definition, {})
-      vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, {})
-    end
+    -- Enable the LSP servers
+    vim.lsp.enable('rust_analyzer')
+    vim.lsp.enable('clangd')
+    vim.lsp.enable('lua_ls')
+
+    -- LSP Keymaps
+    vim.keymap.set('n', 'K',  vim.lsp.buf.hover,       { desc = 'Hover' })
+    vim.keymap.set('n', 'gd', vim.lsp.buf.definition,  { desc = 'Go to Definition' })
+    vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, { desc = 'Code Action' })
+  end
   },
 
   -- Autocomplete
@@ -118,24 +130,23 @@ require("lazy").setup({
 
   -- FZF-lua for fuzzy finding
   { "junegunn/fzf", build = "./install --bin" },
- 	{
-		"ibhagwan/fzf-lua",
-		-- optional for icon support
-		dependencies = { "nvim-tree/nvim-web-devicons" },
-		config = function()
-			-- calling `setup` is optional for customization
+  {
+    "ibhagwan/fzf-lua",
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    config = function()
       local actions = require("fzf-lua.actions")
-			require("fzf-lua").setup({
+      require("fzf-lua").setup({
         grep = {
+          rg_glob = true,  -- ← ADD THIS LINE
           actions = {
-            -- swapping the bindings for ctrl-r so ctrl-g matches files
-           ["ctrl-r"] = { actions.grep_lgrep },
+            ["ctrl-r"] = { actions.grep_lgrep },
             ["ctrl-g"] = { actions.toggle_ignore },
           }
         },
       })
-		end,
-	},
+    end,
+  },
+
 
   -- File tree
   {
@@ -219,7 +230,7 @@ vim.cmd("colorscheme onedark")
 vim.cmd("command! FF Fzf")
 
 vim.keymap.set("n", "<c-P>", require("fzf-lua").files, { desc = "Fzf Files" })
-vim.keymap.set("n", "<c-L>", require("fzf-lua").live_grep_glob, { desc = "Fzf Live Global Grep" })
+vim.keymap.set("n", "<c-L>", require("fzf-lua").live_grep, { desc = "Fzf Live Global Grep" })
 vim.keymap.set("n", "<c-B>", require("fzf-lua").buffers, { desc = "Fzf Buffers" })
 
 vim.g.copilot_no_tab_map = true
